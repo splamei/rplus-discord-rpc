@@ -61,6 +61,8 @@ namespace Rhythm_Plus_Discord_RPC
         public int port = 55256;
         public int timeOut = 3;
 
+        public bool forceQuit = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -385,7 +387,6 @@ namespace Rhythm_Plus_Discord_RPC
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            stopServices();
             this.Close();
         }
 
@@ -430,6 +431,8 @@ namespace Rhythm_Plus_Discord_RPC
                 }
 
                 saveManager.saveData();
+
+                Logging.logString("Stopped the socket");
             }
             catch (Exception ex)
             {
@@ -438,12 +441,6 @@ namespace Rhythm_Plus_Discord_RPC
             }
 
             running = false;
-        }
-
-        protected override void OnFormClosing(FormClosingEventArgs e)
-        {
-            stopServices();
-            base.OnFormClosing(e);
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -467,7 +464,27 @@ namespace Rhythm_Plus_Discord_RPC
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            stopServices();
+            if (forceQuit)
+            {
+                stopServices();
+            }
+            else
+            {
+                if (MessageBox.Show("Would you like to hide the server window so it's out of your way while still allowing for Rich Presence to work or close out of the app fully and stop RPC?", "Hide or close?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    e.Cancel = true;
+                    this.Opacity = 0;
+                    this.Hide();
+
+                    notifyIcon1.BalloonTipTitle = "We're now hiding in the background";
+                    notifyIcon1.BalloonTipText = "We're now running in the background to allow you to keep RPC working. You can find us in the system tray";
+                    notifyIcon1.ShowBalloonTip(10);
+                }
+                else
+                {
+                    stopServices();
+                }
+            }
         }
 
         public static void takeFocusOtherInstance()
@@ -487,6 +504,24 @@ namespace Rhythm_Plus_Discord_RPC
             {
                 licences.ShowDialog();
             }
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            this.Show();
+            this.Opacity = 1;
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            this.Hide();
+            this.Opacity = 0;
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+            forceQuit = true;
+            this.Close();
         }
     }
 
