@@ -277,6 +277,16 @@ namespace Rhythm_Plus_Discord_RPC
         {
             if (running) return;
 
+            var exists = System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+            if (exists)
+            {
+                MessageBox.Show("You seem to have the server app already running in a seperate instance. If you want to close it or configure settings for the app, find it's icon in the system tray, right click and press 'Open'.", "Rhythm Plus Discord RPC", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                forceQuit = true;
+                this.Close();
+                return;
+            }
+
             saveManager.loadData();
 
             timeOut = saveManager.getInt("timeout");
