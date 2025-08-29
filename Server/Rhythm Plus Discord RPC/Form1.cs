@@ -533,6 +533,12 @@ namespace Rhythm_Plus_Discord_RPC
             forceQuit = true;
             this.Close();
         }
+
+        private void notifyIcon1_Click(object sender, EventArgs e)
+        {
+            this.Show();
+            this.Opacity = 1;
+        }
     }
 
     public class PageData

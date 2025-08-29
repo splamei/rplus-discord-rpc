@@ -202,6 +202,7 @@
             this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
             this.notifyIcon1.Text = "notifyIcon1";
             this.notifyIcon1.Visible = true;
+            this.notifyIcon1.Click += new System.EventHandler(this.notifyIcon1_Click);
             // 
             // contextMenuStrip1
             // 
@@ -212,7 +213,7 @@
             this.toolStripMenuItem3,
             this.toolStripMenuItem4});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(209, 120);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(209, 98);
             // 
             // toolStripMenuItem1
             // 
