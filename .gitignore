@@ -1,0 +1,19 @@
+node_modules/
+dist/
+build/
+
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.vs/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+
+.DS_Store
+Thumbs.db
+
+Git Commands.txt
