@@ -137,7 +137,7 @@
                                                         <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
                                                             <div style="font-size: 30px; line-height: 140%; text-align: center; word-wrap: break-word;">
-                                                                <p style="line-height: 140%;">Welcome to the Rhythm Plus DiscordRPC extension</p>
+                                                                <p style="line-height: 140%;">Rhythm Plus DiscordRPC Extension Settings</p>
                                                             </div>
 
                                                         </td>
@@ -171,7 +171,7 @@
                                                         <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
                                                             <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                                                <p style="line-height: 140%;">Thank you for installing this extension! This now allows you to show that your playing the Rhythm Plus web game on Discord via rich presence as well as allowing you to show the current song you're playing, the results and current stats!</p>
+                                                                <p style="line-height: 140%;">Note: These settings are separate from the main app that has additional settings. You can change these by finding the Rhythm Plus icon in the system tray.</p>
                                                             </div>
 
                                                         </td>
@@ -204,66 +204,23 @@
                                                     <tr>
                                                         <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
 
-                                                            <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;"><span>What to do now</span></h1>
-
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                            <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-
                                                             <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                                                <p style="line-height: 140%;">If you haven't already, you need to install the Windows app that will receive the stats of your game through the extension and create the DiscordRPC since the extension can't do it itself. You can find it <a rel="noopener" href="https://www.veemo.uk" target="_blank">here</a> on the same GitHub repo in the releases section.</p>
-                                                            </div>
+                                                                <form id="settingsForm">
+                                                                    <label>
+                                                                        Server Port (same as in the server app):
+                                                                        <input type="number" id="serverPort" min="49152" max="65535" required>
+                                                                    </label>
+                                                                    <br>
+                                                                    <label>
+                                                                        Update Interval in seconds (smaller then the timeout in the server app):
+                                                                        <input type="number" id="updateInterval" min="1", max="4" required>
+                                                                    </label>
+                                                                    <br>
+                                                                    <button type="submit">Save</button>
+                                                                </form>
 
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                                                <script src="settings.js"></script>
 
-                                            <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:20px;font-family:arial,helvetica,sans-serif;" align="left">
-
-                                                            <table role="presentation" aria-label="divider" height="0px" align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;table-layout: fixed;border-spacing: 0;mso-table-lspace: 0pt;mso-table-rspace: 0pt;vertical-align: top;border-top: 1px solid #555555;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-                                                                <tbody>
-                                                                    <tr style="vertical-align: top">
-                                                                        <td style="word-break: break-word;border-collapse: collapse !important;vertical-align: top;font-size: 0px;line-height: 0px;mso-line-height-rule: exactly;-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100%">
-                                                                            <span>&#160;</span>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                            <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-
-                                                            <h1 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;"><span>How to configure</span></h1>
-
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
-                                            <table style="font-family:arial,helvetica,sans-serif;" role="presentation" cellpadding="0" cellspacing="0" width="100%" border="0">
-                                                <tbody>
-                                                    <tr>
-                                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px;font-family:arial,helvetica,sans-serif;" align="left">
-
-                                                            <div style="font-size: 14px; line-height: 140%; text-align: left; word-wrap: break-word;">
-                                                                <p style="line-height: 140%;">To configure the extension's settings, find the Rhythm Plus icon in the system tray for the 'server' app and press it. You should now see a window appear allowing you to configure the app or right click the icon to get quick options such as closing the server. You can also configure the extension settings by pressing the icon of the extension in the extension menu of your browser.</p>
                                                             </div>
 
                                                         </td>
@@ -368,7 +325,6 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-
                                         </div>
                                     </div>
                                 </div>
@@ -401,7 +357,6 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
-
                                         </div>
                                     </div>
                                 </div>

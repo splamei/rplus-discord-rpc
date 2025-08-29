@@ -48,7 +48,7 @@ chrome.runtime.onInstalled.addListener((details) => {
 });
 
 chrome.action.onClicked.addListener((tab) => {
-    chrome.tabs.create({ url: chrome.runtime.getURL("index.html") });
+    chrome.tabs.create({ url: chrome.runtime.getURL("settings.html") });
 });
 
 chrome.runtime.onMessage.addListener((msg) => {

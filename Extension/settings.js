@@ -6,14 +6,14 @@ const defaultSettings = {
 document.addEventListener("DOMContentLoaded", () => {
     chrome.storage.local.get(defaultSettings, (items) => {
         document.getElementById("serverPort").value = items.serverPort;
-        document.getElementById("updateInterval").value = items.updateInterval;
+        document.getElementById("updateInterval").value = items.updateInterval / 1000;
     });
 });
 
 document.getElementById("settingsForm").addEventListener("submit", (e) => {
     e.preventDefault();
     const port = parseInt(document.getElementById("serverPort").value, 10);
-    const interval = parseInt(document.getElementById("updateInterval").value, 10);
+    const interval = parseInt(document.getElementById("updateInterval").value, 10) * 1000;
 
     chrome.storage.local.set({ serverPort: port, updateInterval: interval }, () => {
         alert("Settings saved. They will take full effect when you restart your browser");
