@@ -480,14 +480,14 @@ namespace Rhythm_Plus_Discord_RPC
             }
             else
             {
-                if (MessageBox.Show("Would you like to hide the server window so it's out of your way while still allowing for Rich Presence to work or close out of the app fully and stop RPC?", "Hide or close?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (MessageBox.Show("Would you like the server window to be hidden so it's out of your way while still allowing for Rich Presence to work or would you like to close out of the app fully and stop RPC?", "Hide or close?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     e.Cancel = true;
                     this.Opacity = 0;
                     this.Hide();
 
                     notifyIcon1.BalloonTipTitle = "We're now hiding in the background";
-                    notifyIcon1.BalloonTipText = "We're now running in the background to allow you to keep RPC working. You can find us in the system tray";
+                    notifyIcon1.BalloonTipText = "We're now running in the background to allow RPC to keep running. We'll be in the system tray if you need anything";
                     notifyIcon1.ShowBalloonTip(10);
                 }
                 else

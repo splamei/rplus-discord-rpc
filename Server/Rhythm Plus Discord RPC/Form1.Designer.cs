@@ -252,10 +252,10 @@
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.Location = new System.Drawing.Point(22, 269);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(471, 12);
+            this.label6.Size = new System.Drawing.Size(476, 12);
             this.label6.TabIndex = 15;
             this.label6.Text = "WARNING; If you use the wrong port, the server may be unable to run or break othe" +
-    "r app. Please choose carefully!";
+    "r apps. Please choose carefully!";
             // 
             // label7
             // 
@@ -346,7 +346,7 @@
             this.Name = "Form1";
             this.Opacity = 0D;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Rhythm Plus DiscordRPC";
+            this.Text = "Rhythm Plus DiscordRPC - By Splamei";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.Shown += new System.EventHandler(this.Form1_Shown);
