@@ -15,6 +15,9 @@ Rhythm Plus is a web-based vertical scrolling rhythm game (VSRG), you can make, 
 - Be able to access Rhythm Plus in a Chromium Web Browser
 
 ## Installation
+
+### Wait! This repo is still under development so there are no releases yet. To help speed up the process, you could help with the repo's development via issues and PRs!
+
 Note: You must have the Discord app installed as it will not work on the website version
 1. Download the server app and extension through the [releases tabs](https://github.com/splamei/rplus-discord-rpc/releases)
 2. Extract the download zip file via your fave tool
