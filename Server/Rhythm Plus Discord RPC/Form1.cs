@@ -20,6 +20,10 @@ namespace Rhythm_Plus_Discord_RPC
         private const int SW_RESTORE = 9;
 
 
+        // IMPORTANT LOCKS
+        private readonly object dataLock = new object();
+        private readonly object rpcLock = new object();
+
 
         private WebSocketServer server;
         private IWebSocketConnection currentSocket;
@@ -40,7 +44,7 @@ namespace Rhythm_Plus_Discord_RPC
 
         public SaveManager saveManager = new SaveManager();
 
-        public float currentAccuracy = 0.0f;
+        public float snapshotCurrentAccuracy = 0.0f;
         public string currentScore = "";
         public float currentTime = 0.0f;
 
@@ -70,206 +74,241 @@ namespace Rhythm_Plus_Discord_RPC
 
         public void setUpRPC()
         {
-            client = new DiscordRpcClient("1331684607199936552");
-
-            client.Logger = new ConsoleLogger() { Level = DiscordRPC.Logging.LogLevel.Warning };
-
-            client.OnReady += (sender, e) =>
+            lock (rpcLock)
             {
-                Logging.logString("Received Ready from user " + e.User.Username);
-                failedRpConnection = false;
-            };
+                if (client != null) { return; }
 
-            client.OnPresenceUpdate += (sender, e) =>
-            {
-                if (e.Presence != null)
+                client = new DiscordRpcClient("1331684607199936552");
+
+                client.Logger = new ConsoleLogger() { Level = DiscordRPC.Logging.LogLevel.Warning };
+
+                client.OnReady += (sender, e) =>
                 {
-                    Logging.logString("Received Update - " + e.Presence.Details);
-                }
-            };
+                    Logging.logString("Received Ready from user " + e.User.Username);
+                    failedRpConnection = false;
+                };
 
-            client.OnConnectionFailed += (sender, e) =>
-            {
-                Logging.logString("Failed to connect to discord - " + e.Type.ToString());
+                client.OnPresenceUpdate += (sender, e) =>
+                {
+                    if (e.Presence != null)
+                    {
+                        Logging.logString("Received Update - " + e.Presence.Details);
+                    }
+                };
 
-                saveManager.saveData();
-                enableRPC = false;
+                client.OnConnectionFailed += (sender, e) =>
+                {
+                    Logging.logString("Failed to connect to discord - " + e.Type.ToString());
 
-                client.Dispose();
-            };
+                    saveManager.saveData();
+                    enableRPC = false;
 
-            client.OnClose += (sender, e) =>
-            {
-                Logging.logString("Connection closed to discord - " + e.Reason);
-            };
+                    client.Dispose();
+                };
 
-            client.Initialize();
+                client.OnClose += (sender, e) =>
+                {
+                    Logging.logString("Connection closed to discord - " + e.Reason);
+                };
 
-            startRPC = DateTime.UtcNow;
+                client.Initialize();
 
-            playButton = new DiscordRPC.Button();
-            playButton.Label = "Play Rhythm Plus";
-            playButton.Url = "https://rhythm-plus.com";
+                startRPC = DateTime.UtcNow;
+
+                playButton = new DiscordRPC.Button();
+                playButton.Label = "Play Rhythm Plus";
+                playButton.Url = "https://rhythm-plus.com";
+            }
 
             setPresence();
         }
 
         public void setPresence()
         {
-            try
+            string uri;
+            string title;
+            float snapshotsnapshotCurrentAccuracy;
+            string snapshotCurrentScore;
+            float snapshotCurrentTime;
+            string snapshotResultScore, snapshotResultAccuracy, snapshotResultRank, snapshotResultMaxCombo, snapshotResultFC;
+            string snapshotSelectedSongName, snapshotSelectedSongAuthor, snapshotSelectedSongCharter, snapshotSelectedSongTitle;
+            DateTime snapshotStartRPC;
+            string snapshotPrevDataRP;
+
+            lock (dataLock)
             {
-                if (hasLostConnection)
-                {
-                    hasLostConnection = false;
-                    startRPC = DateTime.UtcNow;
-                }
+                uri = currentUri ?? "";
+                title = currentTitle ?? "";
+                snapshotsnapshotCurrentAccuracy = snapshotCurrentAccuracy;
+                snapshotCurrentScore = currentScore;
+                snapshotCurrentTime = currentTime;
+                snapshotResultScore = resultScore;
+                snapshotResultAccuracy = resultAccuracy;
+                snapshotResultRank = resultRank;
+                snapshotResultMaxCombo = resultMaxCombo;
+                snapshotResultFC = resultFC;
+                snapshotSelectedSongName = selectedSongName;
+                snapshotSelectedSongAuthor = selectedSongAuthor;
+                snapshotSelectedSongCharter = selectedSongCharter;
+                snapshotSelectedSongTitle = selectedSongTitle;
+                snapshotStartRPC = startRPC;
+                snapshotPrevDataRP = prevDataRP;
 
-                string point = "Playing Rhythm Plus";
-                string uri = currentUri;
-                bool forceUpdate = false;
-
-                if (uri.Equals("https://rhythm-plus.com"))
+                try
                 {
-                    point = "On the into screen";
-                }
-                else if (uri.StartsWith("https://rhythm-plus.com/menu/"))
-                {
-                    point = "Looking at songs";
-                }
-                else if (uri.Equals("https://rhythm-plus.com/studio/") || uri.StartsWith("https://rhythm-plus.com/editor/"))
-                {
-                    point = "Creating a chart";
-                }
-                else if (uri.Equals("https://rhythm-plus.com/account/"))
-                {
-                    point = "Changing settings";
-                }
-                else if (uri.Equals("https://rhythm-plus.com/tutorial/"))
-                {
-                    point = "Playing the tutorial";
-                }
-                else if (uri.StartsWith("https://rhythm-plus.com/result/"))
-                {
-                    point = "Looking at results";
-                    forceUpdate = true;
-                }
-                else if (uri.StartsWith("https://rhythm-plus.com/game-over/"))
-                {
-                    point = "Failed a chart";
-                }
-                else if (uri.StartsWith("https://rhythm-plus.com/game/"))
-                {
-                    string songName = currentTitle.Split(new string[] { " - Rhythm+ Music" }, StringSplitOptions.None)[0];
-                    if (songName == "Game")
+                    if (hasLostConnection)
                     {
-                        point = "Loading a song";
+                        hasLostConnection = false;
+                        startRPC = DateTime.UtcNow;
                     }
-                    else
+
+                    string point = "Playing Rhythm Plus";
+                    //string uri = currentUri;
+                    bool forceUpdate = false;
+
+                    if (uri.Equals("https://rhythm-plus.com"))
                     {
-                        if (showCurrentChartCheckbox.Checked)
+                        point = "On the into screen";
+                    }
+                    else if (uri.StartsWith("https://rhythm-plus.com/menu/"))
+                    {
+                        point = "Looking at songs";
+                    }
+                    else if (uri.Equals("https://rhythm-plus.com/studio/") || uri.StartsWith("https://rhythm-plus.com/editor/"))
+                    {
+                        point = "Creating a chart";
+                    }
+                    else if (uri.Equals("https://rhythm-plus.com/account/"))
+                    {
+                        point = "Changing settings";
+                    }
+                    else if (uri.Equals("https://rhythm-plus.com/tutorial/"))
+                    {
+                        point = "Playing the tutorial";
+                    }
+                    else if (uri.StartsWith("https://rhythm-plus.com/result/"))
+                    {
+                        point = "Looking at results";
+                        forceUpdate = true;
+                    }
+                    else if (uri.StartsWith("https://rhythm-plus.com/game-over/"))
+                    {
+                        point = "Failed a chart";
+                    }
+                    else if (uri.StartsWith("https://rhythm-plus.com/game/"))
+                    {
+                        string songName = title.Split(new string[] { " - Rhythm+ Music" }, StringSplitOptions.None)[0];
+                        if (songName == "Game")
                         {
-                            if (songName == selectedSongTitle)
-                            {
-                                point = $"Playing '{selectedSongName} -by- {selectedSongAuthor}' [{selectedSongCharter}]";
-                            }
-                            else
-                            {
-                                point = $"Playing '{songName}'";
-                            }
+                            point = "Loading a song";
                         }
                         else
                         {
-                            point = "Playing a chart";
-                        }
-
-                            forceUpdate = true;
-                    }
-                }
-
-                if (prevDataRP != point || forceUpdate)
-                {
-                    string state = "";
-                    if (uri.StartsWith("https://rhythm-plus.com/game/") && showCurrentStatsCheckbox.Checked)
-                    {
-                        if (currentScore != "")
-                        {
-                            string rank = "F";
-                            if (currentAccuracy == 0)
+                            if (showCurrentChartCheckbox.Checked)
                             {
-                                rank = "?";
-                            }
-                            else if (currentAccuracy > 99f)
-                            {
-                                rank = "S+";
-                            }
-                            else if (currentAccuracy > 97f)
-                            {
-                                rank = "S";
-                            }
-                            else if (currentAccuracy > 94f)
-                            {
-                                rank = "A";
-                            }
-                            else if (currentAccuracy > 90f)
-                            {
-                                rank = "B";
-                            }
-                            else if (currentAccuracy > 80f)
-                            {
-                                rank = "C";
-                            }
-                            else if (currentAccuracy > 60f)
-                            {
-                                rank = "D";
-                            }
-
-                            state = $" - Score: {currentScore} - Acc: {Math.Round(currentAccuracy * 10) / 10}% - Rank: ~{rank} - Point: {Math.Round(currentTime * 10) / 10}%";
-                        }
-                    }
-                    else if (uri.StartsWith("https://rhythm-plus.com/result/") && showCurrentStatsCheckbox.Checked)
-                    {
-                        if (resultScore != "")
-                        {
-                            if (resultFC == "Full Combo")
-                            {
-                                state = $" - [FC] - Score: {resultScore} - Acc: {resultAccuracy}% - Rank: {resultRank} - Max Combo: {resultMaxCombo}";
+                                if (songName == selectedSongTitle)
+                                {
+                                    point = $"Playing '{selectedSongName} -by- {selectedSongAuthor}' [{selectedSongCharter}]";
+                                }
+                                else
+                                {
+                                    point = $"Playing '{songName}'";
+                                }
                             }
                             else
                             {
-                                state = $" - Score: {resultScore} - Acc: {resultAccuracy}% - Rank: {resultRank} - Max Combo: {resultMaxCombo}";
+                                point = "Playing a chart";
                             }
+
+                            forceUpdate = true;
                         }
                     }
 
-                    client.SetPresence(new RichPresence()
+                    if (prevDataRP != point || forceUpdate)
                     {
-                        Details = point,
-                        Timestamps = new Timestamps()
+                        string state = "";
+                        if (uri.StartsWith("https://rhythm-plus.com/game/") && showCurrentStatsCheckbox.Checked)
                         {
-                            Start = startRPC
-                        },
-                        Assets = new Assets()
+                            if (snapshotCurrentScore != "")
+                            {
+                                string rank = "F";
+                                if (snapshotCurrentAccuracy == 0)
+                                {
+                                    rank = "?";
+                                }
+                                else if (snapshotCurrentAccuracy > 99f)
+                                {
+                                    rank = "S+";
+                                }
+                                else if (snapshotCurrentAccuracy > 97f)
+                                {
+                                    rank = "S";
+                                }
+                                else if (snapshotCurrentAccuracy > 94f)
+                                {
+                                    rank = "A";
+                                }
+                                else if (snapshotCurrentAccuracy > 90f)
+                                {
+                                    rank = "B";
+                                }
+                                else if (snapshotCurrentAccuracy > 80f)
+                                {
+                                    rank = "C";
+                                }
+                                else if (snapshotCurrentAccuracy > 60f)
+                                {
+                                    rank = "D";
+                                }
+
+                                state = $" - Score: {snapshotCurrentScore} - Acc: {Math.Round(snapshotCurrentAccuracy * 10) / 10}% - Rank: ~{rank} - Point: {Math.Round(snapshotCurrentTime * 10) / 10}%";
+                            }
+                        }
+                        else if (uri.StartsWith("https://rhythm-plus.com/result/") && showCurrentStatsCheckbox.Checked)
                         {
-                            LargeImageKey = "logo",
-                            LargeImageText = "Rhythm Plus - Discord RPC",
-                            SmallImageKey = "icon",
-                            SmallImageText = "App by Splamei"
-                        },
-                        Buttons = new DiscordRPC.Button[]
+                            if (snapshotResultScore != "")
+                            {
+                                if (resultFC == "Full Combo")
+                                {
+                                    state = $" - [FC] - Score: {snapshotResultScore} - Acc: {snapshotResultAccuracy}% - Rank: {resultRank} - Max Combo: {resultMaxCombo}";
+                                }
+                                else
+                                {
+                                    state = $" - Score: {snapshotResultScore} - Acc: {snapshotResultAccuracy}% - Rank: {resultRank} - Max Combo: {resultMaxCombo}";
+                                }
+                            }
+                        }
+
+                        client.SetPresence(new RichPresence()
                         {
+                            Details = point,
+                            Timestamps = new Timestamps()
+                            {
+                                Start = startRPC
+                            },
+                            Assets = new Assets()
+                            {
+                                LargeImageKey = "logo",
+                                LargeImageText = "Rhythm Plus - Discord RPC",
+                                SmallImageKey = "icon",
+                                SmallImageText = "App by Splamei"
+                            },
+                            Buttons = new DiscordRPC.Button[]
+                            {
                                 playButton
-                        },
-                        State = state
-                    });
+                            },
+                            State = state
+                        });
 
-                    prevDataRP = point;
+                        prevDataRP = point;
 
-                    forceUpdate = false;
+                        forceUpdate = false;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Logging.logString("Error! - " + ex.ToString());
+                catch (Exception ex)
+                {
+                    Logging.logString("Error! - " + ex.ToString());
+                }
             }
         }
 
@@ -322,7 +361,10 @@ namespace Rhythm_Plus_Discord_RPC
                 server = new WebSocketServer("ws://0.0.0.0:" + port);
                 server.Start(socket =>
                 {
-                    currentSocket = socket;
+                    lock (dataLock)
+                    {
+                        currentSocket = socket;
+                    }
 
                     socket.OnOpen = () =>
                     {
@@ -334,44 +376,50 @@ namespace Rhythm_Plus_Discord_RPC
                     {
                         try
                         {
-                            lastMessageTime = DateTime.Now;
-
-                            var data = JsonConvert.DeserializeObject<PageData>(message);
-                            if (data == null) return;
-
-                            this.Invoke(new Action(() =>
+                            lock (dataLock)
                             {
-                                lblStatus.Text = "Connected and showing Rich Presence";
-                            }));
+                                lastMessageTime = DateTime.Now;
 
-                            currentUri = data.url;
-                            currentTitle = data.title;
+                                var data = JsonConvert.DeserializeObject<PageData>(message);
+                                if (data == null) return;
 
-                            if (float.TryParse(data.currentAccuracy, out currentAccuracy)) { }
-                            currentScore = data.currentScore;
-                            if (float.TryParse(data.currentTime.Replace("%", ""), out currentTime)) { }
+                                this.Invoke(new Action(() =>
+                                {
+                                    lblStatus.Text = "Connected and showing Rich Presence";
+                                }));
 
-                            resultAccuracy = data.resultAccuracy;
-                            resultRank = data.resultRank;
-                            resultMaxCombo = data.resultMaxCombo;
-                            resultScore = data.resultScore;
-                            resultFC = data.resultFC;
+                                currentUri = data.url;
+                                currentTitle = data.title;
 
-                            if (!String.IsNullOrEmpty(data.selectedSongName))
-                            {
-                                selectedSongName = data.selectedSongName;
-                                selectedSongAuthor = data.selectedSongAuthor;
-                                selectedSongCharter = data.selectedSongCharter;
-                                selectedSongTitle = data.selectedSongTitle;
+                                if (float.TryParse(data.snapshotCurrentAccuracy, out snapshotCurrentAccuracy)) { }
+                                currentScore = data.currentScore;
+                                if (float.TryParse(data.currentTime.Replace("%", ""), out currentTime)) { }
+
+                                resultAccuracy = data.resultAccuracy;
+                                resultRank = data.resultRank;
+                                resultMaxCombo = data.resultMaxCombo;
+                                resultScore = data.resultScore;
+                                resultFC = data.resultFC;
+
+                                if (!String.IsNullOrEmpty(data.selectedSongName))
+                                {
+                                    selectedSongName = data.selectedSongName;
+                                    selectedSongAuthor = data.selectedSongAuthor;
+                                    selectedSongCharter = data.selectedSongCharter;
+                                    selectedSongTitle = data.selectedSongTitle;
+                                }
                             }
 
-                            if (client == null)
+                            lock (rpcLock)
                             {
-                                setUpRPC();
-                            }
-                            else
-                            {
-                                setPresence();
+                                if (client == null)
+                                {
+                                    setUpRPC();
+                                }
+                                else
+                                {
+                                    setPresence();
+                                }
                             }
                         }
                         catch (Exception ex)
@@ -406,14 +454,50 @@ namespace Rhythm_Plus_Discord_RPC
 
             try
             {
-                if (currentSocket != null)
-                    currentSocket.Close();
-
-                if (client != null)
+                try
                 {
-                    client.ClearPresence();
-                    client.Dispose();
-                    client = null;
+                    lock (dataLock)
+                    {
+                        if (currentSocket != null)
+                        {
+                            currentSocket.Close();
+                            currentSocket = null;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logging.logString($"Error closing socket! - " + ex);
+                }
+
+                lock (rpcLock)
+                {
+                    try
+                    {
+                        if (client != null)
+                        {
+                            client.ClearPresence();
+                            client.Dispose();
+                            client = null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.logString($"Error closing client! - " + ex);
+                    }
+
+                    try
+                    {
+                        if (server != null)
+                        {
+                            server.Dispose();
+                            server = null;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logging.logString($"Error closing server! - " + ex);
+                    }
                 }
 
                 server = null;
@@ -455,20 +539,23 @@ namespace Rhythm_Plus_Discord_RPC
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (lastMessageTime != DateTime.MinValue && (DateTime.Now - lastMessageTime).TotalSeconds > 6)
+            lock (dataLock)
             {
-                if (client != null)
+                if (lastMessageTime != DateTime.MinValue && (DateTime.Now - lastMessageTime).TotalSeconds > 6)
                 {
-                    client.ClearPresence();
+                    if (client != null)
+                    {
+                        client.ClearPresence();
+                    }
+
+                    this.Invoke(new Action(() =>
+                    {
+                        lblStatus.Text = "Lost game connection. Not showing RPC";
+                        hasLostConnection = true;
+                    }));
+
+                    lastMessageTime = DateTime.MinValue;
                 }
-
-                this.Invoke(new Action(() =>
-                {
-                    lblStatus.Text = "Lost game connection. Not showing RPC";
-                    hasLostConnection = true;
-                }));
-
-                lastMessageTime = DateTime.MinValue;
             }
         }
 
@@ -557,7 +644,7 @@ namespace Rhythm_Plus_Discord_RPC
         public string resultMaxCombo { get; set; }
         public string resultFC { get; set; }
 
-        public string currentAccuracy { get; set; }
+        public string snapshotCurrentAccuracy { get; set; }
         public string currentScore { get; set; }
         public string currentTime { get; set; }
     }
