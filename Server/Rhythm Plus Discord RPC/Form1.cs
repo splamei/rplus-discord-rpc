@@ -447,7 +447,7 @@ namespace Rhythm_Plus_Discord_RPC
 
         private void btnStop_Click(object sender, EventArgs e)
         {
-            this.Close();
+            hideSelf();
         }
 
         private void stopServices()
@@ -539,6 +539,16 @@ namespace Rhythm_Plus_Discord_RPC
             running = false;
         }
 
+        private void hideSelf()
+        {
+            this.Opacity = 0;
+            this.Hide();
+
+            notifyIcon1.BalloonTipTitle = "We're now hiding in the background";
+            notifyIcon1.BalloonTipText = "We're now running in the background to allow RPC to keep running. We'll be in the system tray if you need anything";
+            notifyIcon1.ShowBalloonTip(10);
+        }
+
         private void timer1_Tick(object sender, EventArgs e)
         {
             lock (dataLock)
@@ -572,12 +582,7 @@ namespace Rhythm_Plus_Discord_RPC
                 if (MessageBox.Show("Would you like the server window to be hidden so it's out of your way while still allowing for Rich Presence to work or would you like to close out of the app fully and stop RPC?", "Hide or close?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     e.Cancel = true;
-                    this.Opacity = 0;
-                    this.Hide();
-
-                    notifyIcon1.BalloonTipTitle = "We're now hiding in the background";
-                    notifyIcon1.BalloonTipText = "We're now running in the background to allow RPC to keep running. We'll be in the system tray if you need anything";
-                    notifyIcon1.ShowBalloonTip(10);
+                    hideSelf();
                 }
                 else
                 {
