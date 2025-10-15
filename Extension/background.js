@@ -32,6 +32,7 @@ function connectSocket() {
 }
 
 function reconnectSocket() {
+    console.log("Reconnecting socket");
     if (socket) socket.close();
     else connectSocket();
 }
@@ -55,6 +56,7 @@ chrome.runtime.onMessage.addListener((msg) => {
     if (msg.type === "RPLUS-RPC-DATA-SENDER" && socket?.readyState === WebSocket.OPEN) {
         try {
             socket.send(JSON.stringify(msg.data));
+            console.log("Sent data to server app!");
         } catch (err) {
             console.warn("Send error! - ", err);
         }

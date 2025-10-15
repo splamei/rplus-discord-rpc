@@ -77,6 +77,7 @@ function getPageData() {
 }
 
 function startPolling() {
+    console.log("Now polling data for sending to server");
     if (timer) clearInterval(timer);
     timer = setInterval(() => safeSend(getPageData()), updateInterval);
 }
