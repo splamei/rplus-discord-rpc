@@ -435,6 +435,8 @@ namespace Rhythm_Plus_Discord_RPC
 
                 lblStatus.Text = "Server running and ready for extension";
                 running = true;
+
+                label9.Text = "Version: " + System.Reflection.Assembly.GetEntryAssembly().GetName().Version.ToString();
             }
             catch (Exception ex)
             {

@@ -55,6 +55,7 @@
             this.portUpDown = new System.Windows.Forms.NumericUpDown();
             this.timeoutUpDown = new System.Windows.Forms.NumericUpDown();
             this.label8 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.portUpDown)).BeginInit();
@@ -321,11 +322,22 @@
             this.label8.Text = "These settings require the server\r\napp to be restarted in order for\r\nchanges to t" +
     "ake effect.";
             // 
+            // label9
+            // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(579, 341);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(78, 13);
+            this.label9.TabIndex = 19;
+            this.label9.Text = "Version 1.0.0.0";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(669, 393);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.timeoutUpDown);
             this.Controls.Add(this.portUpDown);
@@ -387,6 +399,7 @@
         private System.Windows.Forms.NumericUpDown timeoutUpDown;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label label9;
     }
 }
 
