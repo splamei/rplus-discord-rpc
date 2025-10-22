@@ -573,22 +573,22 @@ namespace Rhythm_Plus_Discord_RPC
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (forceQuit)
-            {
+            //if (forceQuit)
+            //{
                 stopServices();
-            }
-            else
-            {
-                if (MessageBox.Show("Would you like the server window to be hidden so it's out of your way while still allowing for Rich Presence to work or would you like to close out of the app fully and stop RPC?", "Hide or close?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {
-                    e.Cancel = true;
-                    hideSelf();
-                }
-                else
-                {
-                    stopServices();
-                }
-            }
+            //}
+            //else
+            //{
+            //    if (MessageBox.Show("Would you like the server window to be hidden so it's out of your way while still allowing for Rich Presence to work or would you like to close out of the app fully and stop RPC?", "Hide or close?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            //    {
+            //        e.Cancel = true;
+            //        hideSelf();
+            //    }
+            //    else
+            //    {
+            //        stopServices();
+            //    }
+            //}
         }
 
         public static void takeFocusOtherInstance()
@@ -632,6 +632,14 @@ namespace Rhythm_Plus_Discord_RPC
         {
             this.Show();
             this.Opacity = 1;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to close out of the app? You won't be able to show what you're playing via Discord RPC unless you use another service/app", "Rhythm Plus Discord RPC", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+            {
+                this.Close();
+            }
         }
     }
 
