@@ -17,9 +17,20 @@ namespace Rhythm_Plus_Discord_RPC
 
         public void loadData()
         {
-            if (File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/Splamei/Rhythm Plus - Splamei Client/RPC.sav"))
+            string savePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Splamei",
+                "Rhythm Plus - Splamei Client",
+                "RPC.sav");
+
+            if (!PathHelper.isSafe(savePath))
             {
-                string[] data = File.ReadAllLines(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/Splamei/Rhythm Plus - Splamei Client/RPC.sav");
+                throw new UnauthorizedAccessException("Attempted to access or read a path outside of the bounds of the client's save directorys");
+            }
+
+            if (File.Exists(savePath))
+            {
+                string[] data = File.ReadAllLines(savePath);
 
                 saveVersion = int.Parse(data[0]);
                 assemblyVersion = new Version(data[1]);
@@ -57,6 +68,17 @@ namespace Rhythm_Plus_Discord_RPC
 
         public void saveData()
         {
+            string savePath = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "Splamei",
+                "Rhythm Plus - Splamei Client",
+                "RPC.sav");
+
+            if (!PathHelper.isSafe(savePath))
+            {
+                throw new UnauthorizedAccessException("Attempted to access or read a path outside of the bounds of the client's save directorys");
+            }
+
             List<string> data = new List<string>();
 
             data.Add(mySaveVer.ToString());
@@ -68,7 +90,7 @@ namespace Rhythm_Plus_Discord_RPC
                 data.Add(dataValues[i]);
             }
 
-            File.WriteAllLines(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/Splamei/Rhythm Plus - Splamei Client/RPC.sav", data);
+            File.WriteAllLines(savePath, data);
         }
 
         public bool dataExist(string name)

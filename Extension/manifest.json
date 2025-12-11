@@ -12,7 +12,7 @@
     },
     "content_scripts": [
         {
-            "matches": [ "*://rhythm-plus.com/*" ],
+          "matches": [ "*://rhythm-plus.com/*" ],
             "js": [ "content.js" ]
         }
     ],

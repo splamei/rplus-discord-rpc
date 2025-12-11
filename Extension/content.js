@@ -13,6 +13,7 @@ function getPageData() {
     let songAuthor = "";
     let songCharter = "";
     let songTitle = "";
+    let songImage = "";
 
     if (songName)
     {
@@ -23,6 +24,7 @@ function getPageData() {
             songCharter = document.querySelector('div.pt-2.text-xs.text-white.text-opacity-25 > span > span')?.innerText;
         }
         songTitle = document.querySelector('div.detail.py-5 > div:nth-child(1)')?.childNodes[1]?.nodeValue?.trim() || "";
+        songImage = document.querySelector('div.detail > div > div > div.image > img').src || "";
     }
 
     let resultRankObj = document.querySelector('.score')?.innerText;
@@ -63,6 +65,7 @@ function getPageData() {
         selectedSongAuthor: songAuthor || "",
         selectedSongCharter: songCharter || "",
         selectedSongTitle: songTitle,
+        selectedSongImage: songImage || "",
 
         resultRank: resultRankObj || "",
         resultAccuracy: resultAccuracyObj,

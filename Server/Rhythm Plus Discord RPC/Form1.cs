@@ -58,6 +58,7 @@ namespace Rhythm_Plus_Discord_RPC
         public string selectedSongAuthor = "";
         public string selectedSongCharter = "";
         public string selectedSongTitle = "";
+        public string selectedSongImage = "";
 
         public string currentUri = "";
         public string currentTitle = "";
@@ -131,7 +132,7 @@ namespace Rhythm_Plus_Discord_RPC
             string snapshotCurrentScore;
             float snapshotCurrentTime;
             string snapshotResultScore, snapshotResultAccuracy, snapshotResultRank, snapshotResultMaxCombo, snapshotResultFC;
-            string snapshotSelectedSongName, snapshotSelectedSongAuthor, snapshotSelectedSongCharter, snapshotSelectedSongTitle;
+            string snapshotSelectedSongName, snapshotSelectedSongAuthor, snapshotSelectedSongCharter, snapshotSelectedSongTitle, snapshotSelectedSongImage;
             DateTime snapshotStartRPC;
             string snapshotPrevDataRP;
 
@@ -151,6 +152,7 @@ namespace Rhythm_Plus_Discord_RPC
                 snapshotSelectedSongAuthor = selectedSongAuthor;
                 snapshotSelectedSongCharter = selectedSongCharter;
                 snapshotSelectedSongTitle = selectedSongTitle;
+                snapshotSelectedSongImage = selectedSongImage;
                 snapshotStartRPC = startRPC;
                 snapshotPrevDataRP = prevDataRP;
 
@@ -163,6 +165,8 @@ namespace Rhythm_Plus_Discord_RPC
                     }
 
                     string point = "Playing Rhythm Plus";
+                    string largeImage = "logo";
+                    string smallImage = "icon";
                     //string uri = currentUri;
                     bool forceUpdate = false;
 
@@ -209,6 +213,13 @@ namespace Rhythm_Plus_Discord_RPC
                                 if (songName == selectedSongTitle)
                                 {
                                     point = $"Playing '{selectedSongName} -by- {selectedSongAuthor}' [{selectedSongCharter}]";
+                                    
+                                    if (snapshotSelectedSongImage != "" && snapshotSelectedSongImage != "null" && snapshotSelectedSongImage != "https://img.youtube.com/vi/tDuEWw648jo/mqdefault.jpg")
+                                    {
+                                        Console.WriteLine(selectedSongImage);
+                                        largeImage = snapshotSelectedSongImage;
+                                        smallImage = "logo";
+                                    }
                                 }
                                 else
                                 {
@@ -288,9 +299,9 @@ namespace Rhythm_Plus_Discord_RPC
                             },
                             Assets = new Assets()
                             {
-                                LargeImageKey = "logo",
+                                LargeImageKey = largeImage,
                                 LargeImageText = "Rhythm Plus - Discord RPC",
-                                SmallImageKey = "icon",
+                                SmallImageKey = smallImage,
                                 SmallImageText = "App by Splamei"
                             },
                             Buttons = new DiscordRPC.Button[]
@@ -407,6 +418,7 @@ namespace Rhythm_Plus_Discord_RPC
                                     selectedSongAuthor = data.selectedSongAuthor;
                                     selectedSongCharter = data.selectedSongCharter;
                                     selectedSongTitle = data.selectedSongTitle;
+                                    selectedSongImage = data.selectedSongImage;
                                 }
                             }
 
@@ -652,6 +664,7 @@ namespace Rhythm_Plus_Discord_RPC
         public string selectedSongAuthor { get; set; }
         public string selectedSongCharter { get; set; }
         public string selectedSongTitle { get; set; }
+        public string selectedSongImage { get; set; }
 
         public string resultRank { get; set; }
         public string resultAccuracy { get; set; }
