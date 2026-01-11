@@ -172,7 +172,7 @@ namespace Rhythm_Plus_Discord_RPC
 
                     if (uri.Equals("https://rhythm-plus.com") || uri.Equals("https://v2.rhythm-plus.com/"))
                     {
-                        point = "On the into screen";
+                        point = "On the title screen";
                     }
                     else if (uri.StartsWith("https://rhythm-plus.com/menu/") || uri.StartsWith("https://v2.rhythm-plus.com/menu/"))
                     {
@@ -184,7 +184,7 @@ namespace Rhythm_Plus_Discord_RPC
                     }
                     else if (uri.Equals("https://rhythm-plus.com/account/") || uri.Equals("https://v2.rhythm-plus.com/account/"))
                     {
-                        point = "Changing settings";
+                        point = "Changing some settings";
                     }
                     else if (uri.Equals("https://rhythm-plus.com/tutorial/") || uri.Equals("https://v2.rhythm-plus.com/tutorial/"))
                     {
@@ -192,7 +192,7 @@ namespace Rhythm_Plus_Discord_RPC
                     }
                     else if (uri.StartsWith("https://rhythm-plus.com/result/") || uri.StartsWith("https://v2.rhythm-plus.com/result/"))
                     {
-                        point = "Looking at results";
+                        point = "Looking at their results";
                         forceUpdate = true;
                     }
                     else if (uri.StartsWith("https://rhythm-plus.com/game-over/") || uri.StartsWith("https://v2.rhythm-plus.com/game-over/"))
