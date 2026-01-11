@@ -170,38 +170,39 @@ namespace Rhythm_Plus_Discord_RPC
                     //string uri = currentUri;
                     bool forceUpdate = false;
 
-                    if (uri.Equals("https://rhythm-plus.com"))
+                    if (uri.Equals("https://rhythm-plus.com") || uri.Equals("https://v2.rhythm-plus.com/"))
                     {
                         point = "On the into screen";
                     }
-                    else if (uri.StartsWith("https://rhythm-plus.com/menu/"))
+                    else if (uri.StartsWith("https://rhythm-plus.com/menu/") || uri.StartsWith("https://v2.rhythm-plus.com/menu/"))
                     {
                         point = "Looking at songs";
                     }
-                    else if (uri.Equals("https://rhythm-plus.com/studio/") || uri.StartsWith("https://rhythm-plus.com/editor/"))
+                    else if (uri.Equals("https://rhythm-plus.com/studio/") || uri.StartsWith("https://rhythm-plus.com/editor/") || uri.Equals("https://v2.rhythm-plus.com/studio/") || uri.StartsWith("https://v2.rhythm-plus.com/editor/"))
                     {
                         point = "Creating a chart";
                     }
-                    else if (uri.Equals("https://rhythm-plus.com/account/"))
+                    else if (uri.Equals("https://rhythm-plus.com/account/") || uri.Equals("https://v2.rhythm-plus.com/account/"))
                     {
                         point = "Changing settings";
                     }
-                    else if (uri.Equals("https://rhythm-plus.com/tutorial/"))
+                    else if (uri.Equals("https://rhythm-plus.com/tutorial/") || uri.Equals("https://v2.rhythm-plus.com/tutorial/"))
                     {
                         point = "Playing the tutorial";
                     }
-                    else if (uri.StartsWith("https://rhythm-plus.com/result/"))
+                    else if (uri.StartsWith("https://rhythm-plus.com/result/") || uri.StartsWith("https://v2.rhythm-plus.com/result/"))
                     {
                         point = "Looking at results";
                         forceUpdate = true;
                     }
-                    else if (uri.StartsWith("https://rhythm-plus.com/game-over/"))
+                    else if (uri.StartsWith("https://rhythm-plus.com/game-over/") || uri.StartsWith("https://v2.rhythm-plus.com/game-over/"))
                     {
                         point = "Failed a chart";
                     }
-                    else if (uri.StartsWith("https://rhythm-plus.com/game/"))
+                    else if (uri.StartsWith("https://rhythm-plus.com/game/") || uri.StartsWith("https://v2.rhythm-plus.com/game/"))
                     {
                         string songName = title.Split(new string[] { " - Rhythm+ Music" }, StringSplitOptions.None)[0];
+                        songName = songName.Split(new string[] { " - Rhythm Plus Music" }, StringSplitOptions.None)[0];
                         if (songName == "Game")
                         {
                             point = "Loading a song";
@@ -238,7 +239,7 @@ namespace Rhythm_Plus_Discord_RPC
                     if (prevDataRP != point || forceUpdate)
                     {
                         string state = "";
-                        if (uri.StartsWith("https://rhythm-plus.com/game/") && showCurrentStatsCheckbox.Checked)
+                        if ((uri.StartsWith("https://rhythm-plus.com/game/") || uri.StartsWith("https://v2.rhythm-plus.com/game/")) && showCurrentStatsCheckbox.Checked)
                         {
                             if (snapshotCurrentScore != "")
                             {
@@ -275,7 +276,7 @@ namespace Rhythm_Plus_Discord_RPC
                                 state = $" - Score: {snapshotCurrentScore} - Acc: {Math.Round(snapshotCurrentAccuracy * 10) / 10}% - Rank: ~{rank} - Point: {Math.Round(snapshotCurrentTime * 10) / 10}%";
                             }
                         }
-                        else if (uri.StartsWith("https://rhythm-plus.com/result/") && showCurrentStatsCheckbox.Checked)
+                        else if ((uri.StartsWith("https://rhythm-plus.com/result/") || uri.StartsWith("https://v2.rhythm-plus.com/result/")) && showCurrentStatsCheckbox.Checked)
                         {
                             if (snapshotResultScore != "")
                             {
