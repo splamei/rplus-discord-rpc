@@ -127,7 +127,7 @@ function getPageData() {
             resultFcObj = document.querySelector('div.combo-container > div.mark-chip.achievement-chip.combo-chip')?.innerText;
         }
 
-        let currentAccuracyObj = document.querySelector('div.score > div:nth-child(2)')?.innerText;
+        let currentAccuracyObj = document.querySelector('div.score > div:nth-child(3)')?.innerText;
         let currentScoreObj = "";
         let progressElem = "";
         let currentTimeObj = "0%";
