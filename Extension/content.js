@@ -99,7 +99,7 @@ function getPageData() {
             //    songCharter = document.querySelector('div.pt-2.text-xs.text-white.text-opacity-25 > span > span')?.innerText;
             //}
             songTitle = document.querySelector('div.text-xl > span.w-fit')?.innerText;
-            songImage = document.querySelector('div.detail > div > div > div.image > img').src || "";
+            songImage = "";// document.querySelector('div.detail > div > div > div.image > img').src || "";
         }
 
         let resultRankObj = document.querySelector('.score')?.innerText;
