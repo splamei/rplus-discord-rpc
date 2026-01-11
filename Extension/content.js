@@ -9,9 +9,20 @@ function safeSend(data) {
 }
 
 function getPageData() {
-    let url = window.location.href;
+    let urlHref = window.location.href;
+    let hostname = "";
 
-    if (url.startsWith("https://rhythm-plus.com"))
+    try
+    {
+        let urlObj = new URL(urlHref);
+        hostname = urlObj.hostname;
+    }
+    catch (ex)
+    {
+        return;
+    }
+
+    if (hostname === "https://rhythm-plus.com")
     {
         let songName = document.querySelector('div.detail.py-5 > div:nth-child(1)')?.innerText
         let songAuthor = "";
@@ -82,7 +93,7 @@ function getPageData() {
             currentTime: currentTimeObj
         };
     }
-    else if (url.startsWith("https://v2.rhythm-plus.com"))
+    else if (hostname === "https://v2.rhythm-plus.com")
     {
         let songName = document.querySelector('div.flex-1 > div.mt-10 > div')?.innerText
         let songAuthor = "";
